@@ -1,0 +1,31 @@
+---
+- name: Install Nginx and schedule its runtime
+  hosts: web
+  become: yes
+  tasks:
+
+    - name: Enable nginx1 topic in Amazon Linux Extras
+      raw: sudo amazon-linux-extras enable nginx1
+
+    - name: Install Nginx
+      raw: sudo yum install -y nginx
+
+    - name: Ensure Nginx is started and enabled
+      raw: sudo systemctl enable --now nginx
+
+    - name: Schedule Nginx to start at 08:00
+      cron:
+        name: "Start Nginx at 08:00"
+        user: root
+        minute: 0
+        hour: 8
+        job: "/bin/systemctl start nginx"
+
+    - name: Schedule Nginx to stop at 17:00
+      cron:
+        name: "Stop Nginx at 17:00"
+        user: root
+        minute: 0
+        hour: 17
+        job: "/bin/systemctl stop nginx"
+

@@ -1,0 +1,15 @@
+---
+- name: Install and start Nginx on EC2
+  hosts: web
+  become: yes
+  tasks:
+
+    - name: Enable nginx1 topic in Amazon Linux Extras
+      raw: sudo amazon-linux-extras enable nginx1
+
+    - name: Install Nginx
+      raw: sudo yum install -y nginx
+
+    - name: Ensure Nginx is started and enabled
+      raw: sudo systemctl enable --now nginx
+
